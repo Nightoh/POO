@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="200.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pt.europeia.SmartCar.controllers.LoginController">
+   <children>
+      <TextField fx:id="id" layoutX="42.0" layoutY="59.0" prefHeight="25.0" prefWidth="217.0" />
+      <TextField fx:id="password" layoutX="42.0" layoutY="115.0" prefHeight="25.0" prefWidth="217.0" />
+      <Button layoutX="213.0" layoutY="152.0" mnemonicParsing="false" onAction="#login" text="Login" />
+      <Label layoutX="42.0" layoutY="35.0" text="ID:" />
+      <Label layoutX="42.0" layoutY="93.0" text="Password:" />
+   </children>
+</AnchorPane>
