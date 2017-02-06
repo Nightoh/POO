@@ -5,8 +5,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 import pt.europeia.SmartCar.application.Main;
+import pt.europeia.SmartCar.application.MsgManager;
 import pt.europeia.SmartCar.models.Soldier;
 import pt.europeia.SmartCar.models.SoldadoDAO;
 
@@ -28,22 +28,29 @@ public class LoginController {
 		welcome = new Text();
 	}
 	
+	/**
+	 *
+	 * 
+	 */
 	public void login() {
 		
-		soldier.setId( Integer.parseInt(id.getText()));
-		soldier.setPassword( password.getText() );	
-		
-		soldier = SoldadoDAO.getSoldier(soldier);
+		try {
+			soldier = SoldadoDAO.getSoldier(Integer.parseInt(id.getText()),password.getText());
+		}catch (Exception e) {
+			MsgManager.aviso("BD error", "O ID ou a Password que introduziu não estão correctas", "Introduza um ID e uma Password válidas");
+			return;
+		}
 		
 		welcome.setText("Welcome " + soldier.getPatente() +" "+ soldier.getNome() + "!");
 		
-		Stage stage = new Stage();
 		StackPane root = new StackPane();
 		Scene scene = new Scene(root,400,80);
 		root.getChildren().add(welcome);
-		stage.setScene(scene);
 		Main.closeLogStage();
-		stage.show();
+		Main.changeLogScene(scene);
+		Main.logDone = true;
+		Main.main(null);
+		
 	}
 
 }
