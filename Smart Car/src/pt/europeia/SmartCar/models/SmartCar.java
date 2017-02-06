@@ -9,32 +9,49 @@ import java.util.Calendar;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.util.Duration;
+import pt.europeia.SmartCar.controllers.CanvasController;
 import pt.europeia.SmartCar.controllers.Coordinates;
 
-public class SmartCar implements Coordinates, Runnable{
+public class SmartCar implements Coordinates {
 
 	private double coordX;
 	private double coordY;
-	private int speedX;
-	private int speedY;
+	private double speedX;
+	private double speedY;
 	private double fuel=100;
-	Calendar calendar = Calendar.getInstance(); 
+	private double width=50;
+	private double height=50;
 	
-	
-	public int getSpeedX() {
+	public double getWidth() {
+		return width;
+	}
+
+	public void setWidth(double width) {
+		this.width = width;
+	}
+
+	public double getHeight() {
+		return height;
+	}
+
+	public void setHeight(double height) {
+		this.height = height;
+	}
+
+	public double getSpeedX() {
 		return speedX;
 	}
 
-	public void setSpeedX(int speedX) {
+	public void setSpeedX(double speedX) {
 		this.speedX = speedX;
 	}
 	
 
-	public int getSpeedY() {
+	public double getSpeedY() {
 		return speedY;
 	}
 
-	public void setSpeedY(int speedY) {
+	public void setSpeedY(double speedY) {
 		this.speedY = speedY;
 	}
 
@@ -77,9 +94,7 @@ public class SmartCar implements Coordinates, Runnable{
 	 * @param x
 	 * @param y
 	 */
-	
-	
-	public void destination (double x, double y, String speed, double fuel){
+	public void destination (double x, double y, double fuel){
 		
 		
 		ArrayList<Double> coords= new ArrayList<Double>(2);
@@ -92,34 +107,26 @@ public class SmartCar implements Coordinates, Runnable{
                  
 									
 		if(fuel>=Math.sqrt((Math.pow(x-coordX, 2))+Math.pow(y-coordY, 2))/30){
-						
 			
-		if (coordX<= x && coordY<= y){
-			Sensors.sensors(speedX,speedY, x, y);
-			}
+			Sensors.sensors(speedX, speedY, x, y);
 			
-		else if (coordX>= x && coordY<= y){
-				Sensors.sensors(speedX*(-1),speedY, x, y);
-				}
-			
-		else if (coordX<= x && coordY>= y){
-				Sensors.sensors(speedX,speedY*(-1), x, y);
-				}
-			
-		else if (coordX>= x && coordY>= y){
-				Sensors.sensors(speedX*(-1),speedY*(-1), x, y);
-				}
-			
+			if(!Sensors.isStopped()){	
 				
 			if ((coordX >= (x-3)&&coordX <= (x+3)) && (coordY >= (y-3)&&coordY <= (y+3)))
 				time.stop();
+			
+			}else{
+				time.stop();
+				Sensors.setStopped(false);
+			}
 			
 			this.fuel= fuel-((Math.sqrt((Math.pow(x-coords.get(0), 2))+Math.pow(y-coords.get(1), 2))/30)
 					-(Math.sqrt((Math.pow(x-coordX, 2))+Math.pow(y-coordY, 2))/30));
 			
 		}
 		
-		if ((coordX>=650 && coordX<=800)&&(coordY>=0 &&coordY<=110)){
+		if ((coordX>=CanvasController.refill.getX()-width && coordX<=CanvasController.refill.getX()+CanvasController.refill.getWidth())
+				&&(coordY>=CanvasController.refill.getY()-height &&coordY<=CanvasController.refill.getY()+CanvasController.refill.getHeight())){
 			
 			setFuel(100);
 		}
@@ -136,12 +143,14 @@ public class SmartCar implements Coordinates, Runnable{
 		
 	}
 	
-	
-	
-	
+public void park(){
+		
+		Sensors.parking(speedX, speedY);
+	}
 	
 
-	public void summon(double x, double y, String speed, double fuel) {
+	public void summon(double x, double y, double fuel) {
+	
 		
 		ArrayList<Double> coords= new ArrayList<Double>(2);
 		coords.add(coordX);
@@ -151,37 +160,31 @@ public class SmartCar implements Coordinates, Runnable{
 		Timeline time = new Timeline();
 		time.getKeyFrames().add(new KeyFrame(Duration.millis(20),
 				(event)-> {
-
+					
+					
 					
 					if(fuel>=Math.sqrt((Math.pow(x-coordX, 2))+Math.pow(y-coordY, 2))/30){
 						
-						if (coordX<= x && coordY<= y){
-							Sensors.sensors(speedX,speedY, x, y);
-							}
-							
-						else if (coordX>= x && coordY<= y){
-								Sensors.sensors(speedX*(-1),speedY, x, y);
-								}
-							
-						else if (coordX<= x && coordY>= y){
-								Sensors.sensors(speedX,speedY*(-1), x, y);
-								}
-							
-						else if (coordX>= x && coordY>= y){
-								Sensors.sensors(speedX*(-1),speedY*(-1), x, y);
-								}
 						
+						Sensors.sensors(speedX, speedY, x, y);
 						
-					if ((coordX >= (x-12)&&coordX <= (x+12)) && (coordY >= (y-12)&&coordY <= (y+12)) )
+			
+			if(!Sensors.isStopped()){			
+						
+					if ((coordX >= (x-32)&&coordX <= (x+width+12)) && (coordY >= (y-32)&&coordY <= (y+height+12)) )
 						time.stop();
-					
+			}else{
+				time.stop();
+				Sensors.setStopped(false);
+			}
 					this.fuel= fuel-((Math.sqrt((Math.pow(x-coords.get(0), 2))+Math.pow(y-coords.get(1), 2))/30)
 							-(Math.sqrt((Math.pow(x-coordX, 2))+Math.pow(y-coordY, 2))/30));
 					}
 					
-					if ((coordX>=650 && coordX<=700)&&(coordY>=0 &&coordY<=50)){
+					if ((coordX>=CanvasController.refill.getX()-width && coordX<=CanvasController.refill.getX()+CanvasController.refill.getWidth())
+							&&(coordY>=CanvasController.refill.getY()-height &&coordY<=CanvasController.refill.getY()+CanvasController.refill.getHeight())){
 						
-						this.fuel=100;
+						setFuel(100);
 					}
 					
 					
@@ -191,32 +194,4 @@ public class SmartCar implements Coordinates, Runnable{
 		time.setCycleCount(Timeline.INDEFINITE);
 		time.play();
 	}
-
-
-	/**
-	 * Listen for commands from the soldier controller of the car
-	 */
-	@Override
-	public void run() {
-
-		try {
-
-			ServerSocket serv = new ServerSocket(12345);
-			while (true) {
-
-				Socket listener = serv.accept();
-				ObjectInputStream in = new ObjectInputStream(listener.getInputStream());
-
-
-			}
-
-		} catch (IOException e) {
-
-			e.printStackTrace();
-		}
-
-
-
-	}
-
 }

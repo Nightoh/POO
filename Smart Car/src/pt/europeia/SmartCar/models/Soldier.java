@@ -11,12 +11,13 @@ public class Soldier implements Coordinates{
 	private String email;
 	private String password;
 	private String patente;
-	private int id;
+	private Integer id;
+	private boolean insideCar;
 	int salario;
 	double coordX = 50;
 	double coordY = 50;
 	
-	public Soldier(String nome, String local, String dnsc, String sexo, String email, int salario) {
+	public Soldier(String nome, String local, String dnsc, String sexo, String email, Integer salario) {
 
 		this.nome = nome;
 		this.local = local;
@@ -24,6 +25,7 @@ public class Soldier implements Coordinates{
 		this.sexo = sexo;
 		this.email = email;
 		this.salario = salario;
+		insideCar = false;
 	}
 	
 	public String getPatente() {
@@ -99,7 +101,7 @@ public class Soldier implements Coordinates{
 		this.password = password;
 	}
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
@@ -129,5 +131,12 @@ public class Soldier implements Coordinates{
 		coordY = y;
 	}
 
+	public boolean isInsideCar() {
+		return insideCar;
+	}
+
+	public void setInsideCar(boolean insideCar) {
+		this.insideCar = insideCar;
+	}
 
 }
