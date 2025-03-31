@@ -1,2 +1,2 @@
 # POO
- Smartcar on a smart citie.
+ Smartcar on a smart city.
